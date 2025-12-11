@@ -1,15 +1,17 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
-	"flag"
 )
 
 func main() {
 	var filepath string
+	var reader string
 
 	flag.StringVar(&filepath, "filepath", "testdata/bookworms.json", "The required json file path")
+	flag.StringVar(&reader, "reader", "Fadi", "The user to get recommendations for")
 	flag.Parse()
 
 	bookworms, err := loadBookworms(filepath)

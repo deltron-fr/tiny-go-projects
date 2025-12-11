@@ -6,21 +6,20 @@ import (
 	"sort"
 )
 
-
 type Recommendation struct {
-	Book Book
+	Book  Book
 	Score float64
 }
 
 type Reader struct {
-	Name string
+	Name  string
 	Books []Book
 }
 
 type set map[Book]struct{}
 
 type recommendationPair struct {
-	Book Book
+	Book       Book
 	Similarity float64
 }
 
@@ -56,7 +55,7 @@ func recommend(allReaders []Reader, target Reader, n int) []Recommendation {
 
 	for book, score := range sortedRecommendations {
 		rec := Recommendation{
-			Book: book,
+			Book:  book,
 			Score: score,
 		}
 		allRecommendations = append(allRecommendations, rec)
@@ -76,7 +75,7 @@ func getAllReaders(bookworms []Bookworm) []Reader {
 
 func getReader(reader string, bookworms []Bookworm) Reader {
 	for _, bookworm := range bookworms {
-		if bookworm.Name == reader { 
+		if bookworm.Name == reader {
 			return Reader(bookworm)
 		}
 	}
@@ -86,7 +85,7 @@ func getReader(reader string, bookworms []Bookworm) Reader {
 func (s set) Contains(b Book) bool {
 	_, ok := s[b]
 	return ok
-} 
+}
 
 func newSet(books ...Book) set {
 	m := make(map[Book]struct{})
@@ -137,8 +136,8 @@ func getFirstNElements(recommendations map[Book]float64, n int) map[Book]float64
 }
 
 func displayRecommendations(recommendations []Recommendation) {
+	fmt.Println("Recommended Books: ")
 	for _, rec := range recommendations {
-		fmt.Println("Recommended Books: ")
 		fmt.Println("Book Title:", rec.Book.Title, "by", rec.Book.Author, "with score:", rec.Score)
 	}
 }

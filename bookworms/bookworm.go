@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -15,9 +16,10 @@ func loadBookworms(filepath string) ([]Bookworm, error) {
 	}
 	defer file.Close()
 
+	buffedReader := bufio.NewReaderSize(file, 1024*1024)
 	var bookworms []Bookworm
 
-	if err := json.NewDecoder(file).Decode(&bookworms); err != nil {
+	if err := json.NewDecoder(buffedReader).Decode(&bookworms); err != nil {
 		return nil, err
 	}
 	return bookworms, nil
@@ -36,13 +38,12 @@ type Book struct {
 	Title  string `json:"title"`
 }
 
-
 func findCommonBooks(bookworms []Bookworm) []Book {
 	booksOnShelves := booksCount(bookworms)
 
 	var commonBooks []Book
 	for book, count := range booksOnShelves {
-		if count > 1  {
+		if count > 1 {
 			commonBooks = append(commonBooks, book)
 		}
 	}

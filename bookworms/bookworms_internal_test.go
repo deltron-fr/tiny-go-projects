@@ -2,7 +2,6 @@ package main
 
 import (
 	"testing"
-
 )
 
 var (
@@ -32,13 +31,13 @@ func TestLoadBookworms_Success(t *testing.T) {
 		},
 		"file doesn't exist": {
 			bookWormsFile: "testdata/no_file.json",
-			want: nil,
-			wantErr: true,
+			want:          nil,
+			wantErr:       true,
 		},
 		"invalid JSON": {
 			bookWormsFile: "testdata/invalid.json",
-			want: nil,
-			wantErr: true,
+			want:          nil,
+			wantErr:       true,
 		},
 	}
 
@@ -60,7 +59,7 @@ func TestLoadBookworms_Success(t *testing.T) {
 				t.Fatalf("different result: got %v, expected %v", got, test.want)
 			}
 		},
-	)
+		)
 	}
 }
 
@@ -111,7 +110,7 @@ func TestBooksCount(t *testing.T) {
 func TestCommonBooks(t *testing.T) {
 	type testCase struct {
 		input []Bookworm
-		want []Book
+		want  []Book
 	}
 
 	tt := map[string]testCase{
@@ -150,7 +149,7 @@ func TestCommonBooks(t *testing.T) {
 }
 
 // equalBookworms is a helper to check the equality of two lists of Books
-func equalBookworms(t *testing.T, bookworms, target []Bookworm)  bool {
+func equalBookworms(t *testing.T, bookworms, target []Bookworm) bool {
 	t.Helper()
 
 	if len(bookworms) != len(target) {
@@ -201,5 +200,3 @@ func equalBooksCount(t *testing.T, got, want map[Book]uint) bool {
 
 	return true
 }
-
-
