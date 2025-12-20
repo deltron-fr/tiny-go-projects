@@ -15,13 +15,19 @@ type Game struct{
 	maxAttempts int
 }
 
-func New(playerInput io.Reader, solution string, maxAttempts int) *Game {
+// New returns a Game variable, which can be used to Play!
+func New(playerInput io.Reader, corpus []string, maxAttempts int) (*Game, error) {
+	if len(corpus) == 0 {
+		return nil, ErrCorpusIsEmpty
+	}
+
 	g := &Game{
-		reader: bufio.NewReader(playerInput),
-		solution: splitToUppercaseCharacters(solution),
+		reader:      bufio.NewReader(playerInput),
+		solution:    splitToUppercaseCharacters(pickWord(corpus)), // pick a random word from the corpus
 		maxAttempts: maxAttempts,
 	}
-	return g
+
+	return g, nil
 }
 
 func (g *Game) Play() {

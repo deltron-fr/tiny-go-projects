@@ -1,16 +1,26 @@
 package main
 
 import (
+	"bufio"
+	"fmt"
 	"os"
 
 	"github.com/deltron-fr/tiny-go-projects/gordle/gordle"
 )
 
-const maxAttempts = 3
+const maxAttempts = 5
 
 func main() {
-	solution := "Hello"
+	corpus, err := gordle.ReadCorpus("corpus/english.txt")
+	if err != nil {
+		_, _ = fmt.Fprintf(os.Stderr, "unable to read corpus: %s", err)
+		return
+	}
 
-	g := gordle.New(os.Stdin, solution, maxAttempts)
+	g, err := gordle.New(bufio.NewReader(os.Stdin), corpus, maxAttempts)
+	if err != nil {
+		_, _ = fmt.Fprintf(os.Stderr, "unable to start game: %s", err)
+		return
+	}
 	g.Play()
 }
