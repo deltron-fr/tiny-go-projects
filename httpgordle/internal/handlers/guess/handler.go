@@ -1,4 +1,4 @@
-package getstatus
+package guess
 
 import (
 	"encoding/json"
@@ -9,7 +9,7 @@ import (
 	"github.com/deltron-fr/tiny-go-projects/httpgordle/internal/session"
 )
 
-// Handle is the handler for the status retrieval endpoint.
+// Handle is the handler for the guess endpoint.
 func Handle(w http.ResponseWriter, req *http.Request) {
 	id := req.PathValue(api.GameID)
 	if id == "" {
@@ -17,19 +17,27 @@ func Handle(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	game := getGame(id)
+	// Read the request, containing the guess, from the body of the input.
+	r := api.GuessRequest{}
+	err := json.NewDecoder(req.Body).Decode(&r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	game := guess(id, r)
 
 	apiGame := api.ToGameResponse(game)
 
 	w.Header().Set("Content-Type", "application/json")
-	err := json.NewEncoder(w).Encode(apiGame)
+	err = json.NewEncoder(w).Encode(apiGame)
 	if err != nil {
 		// The header has already been set. Nothing much we can do here.
 		log.Printf("failed to write response: %s", err)
 	}
 }
 
-func getGame(id string) session.Game {
+func guess(id string, r api.GuessRequest) session.Game {
 	return session.Game{
 		ID: session.GameID(id),
 	}
